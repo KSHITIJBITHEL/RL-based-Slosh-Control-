@@ -7,8 +7,16 @@ void dist_ctrl(double target_dist){
 //    prev_distx = dist1;
 //  }
   act_distx = dist1*cos(yaw_reading*PI/180);
-//  Serial.print("  ");
-//  Serial.print(act_distx);
+  Serial.print(act_distx);
+  Serial.print(",");
+  Serial.print(velocity);
+  Serial.print(",");
+  Serial.println(des_vel);
+  if(flag_stop && !printed) {
+    Serial.println(tripcount);
+    printed = 1;
+  }
+  
   
   dist_error = target_dist - act_distx ;
   d_dist_error = dist_error - prev_dist_error ; 

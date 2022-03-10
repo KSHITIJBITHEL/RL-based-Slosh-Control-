@@ -13,14 +13,14 @@ void calibrate (){
     if (!dmpReady) return;
 
 //  Wait for the readings to saturate
-    for (int i =0; i<=800; i++){
+    for (int i =0; i<=1000; i++){
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) ;
     got_intr();
 //    Serial.println(i);
     }
 //    Serial.println(" Starting Calibration ");
-    for (int i =0; i<10; i++){
+    for (int i =0; i<20; i++){
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) ;
     got_intr();
@@ -28,9 +28,9 @@ void calibrate (){
     sum_pitch = sum_pitch + ypr[1]; 
     sum_roll = sum_roll + ypr[2]; 
     }
-    yaw_offset = sum_yaw/10.0;
-    pitch_offset = sum_pitch/10.0;
-    roll_offset = sum_roll/10.0;
+    yaw_offset = sum_yaw/20.0;
+    pitch_offset = sum_pitch/20.0;
+    roll_offset = sum_roll/20.0;
 //    print_gyro_offsets();
 }
 // ================================================================
