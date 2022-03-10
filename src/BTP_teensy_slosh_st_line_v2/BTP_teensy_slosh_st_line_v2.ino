@@ -42,7 +42,7 @@ MPU9250 mpu;
 USB Usb;
 XBOXUSB Xbox(&Usb);
 int pwm_front_right, pwm_front_left,base_pwm = 20;
-int pwm_back_right, pwm_back_left, k = 10;       
+int pwm_back_right, pwm_back_left, k = 10, tripcount = 0;       
 bool flag_auto = 0,flag_print = 0, flag_slosh = 0,flag_stop=0;
 double kp= 3,kd = 6;
 //double kp = 0.2,kd = 0;
@@ -212,6 +212,10 @@ void loop() {
       pwm_back_right = 127;
       pwm_back_left = 127;
       flag_slosh = 1;
+      if (tripcount >= 201){
+        stop_time = millis();
+        Serial.println("trip complete");
+      }
     }
     send_motor_pwm();
 //    print_lidar();

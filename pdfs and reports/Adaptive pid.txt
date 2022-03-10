@@ -1,0 +1,28 @@
+void adaptive_pid()
+{
+    prev_prev_err_right = prev_err_right;
+    prev_prev_err_left = prev_err_left;
+    prev_err_right = error_right;
+    prev_err_left = error_left;
+    error_left= commanded_left_wheel_speed-speed_left;    //speed_left: actual speed of left wheel
+    error_right= commanded_right_wheel_speed-speed_right; //speed_right: actual speed of right wheel
+    
+    si_left[0] = error_left;
+    si_left[1] = prev_err_left;
+    si_left[2] = prev_prev_err_left;
+    
+    si_right[0] = error_right;
+    si_right[1] = prev_err_right;
+    si_right[2] = prev_prev_err_right;
+    
+    for(int i=0; i<theta_left.size(); i++)                 //updating si*y in theta
+    {   theta_right[i] = theta_right[i]+si_right[i]*speed_right;
+        theta_left[i] = theta_left[i]+si_left[i]*speed_left;
+    }
+    for(int i=0; i<si_left.size(); i++)                    //updating P(t)
+    {   P_left = P_left+si_left[i]*si_left[i];
+        P_right = P_left+si_right[i]*si_right[i];
+    }
+    right_wheel_speed = right_wheel_speed+(theta_right[0]*error_right+theta_right[1]*prev_err_right+theta_right[2]*prev_prev_err_right)/P_right; //speed signal given to right motor
+    left_wheel_speed = left_wheel_speed+(theta_left[0]*error_left+theta_left[1]*prev_err_left+theta_left[2]*prev_prev_err_left)/P_left; //speed signal given to right motor   
+}

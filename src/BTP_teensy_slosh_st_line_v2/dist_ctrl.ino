@@ -15,9 +15,9 @@ void dist_ctrl(double target_dist){
   dist_ctrl_op =kp_d* dist_error +kd_d*d_dist_error;
 //  Serial.print(dist_ctrl_op);
 //  Serial.print("\t");
-//  Serial.println(act_distx);
+  Serial.println(act_distx);
+  if(flag_stop == 1) Serial.println(tripcount);
 //  Serial.print(" "); 
-//  Serial.print(dist1);
 //  Serial.print(" ");
   prev_dist_error = dist_error;
   pwm_front_right += -dist_ctrl_op;

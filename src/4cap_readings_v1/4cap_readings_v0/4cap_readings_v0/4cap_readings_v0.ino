@@ -16,6 +16,7 @@
 //6.11 7.58 10.33 4.73
 
 int capdac1 = 0,capdac2 = 0,capdac3 = 0,capdac4 = 0;
+long timer;
 uint16_t value1[2],value2[2],value3[2],value4[2];
 float cap1,cap2,cap3,cap4, x, y;
 float cap1_offset= 6.11,cap2_offset = 7.58,cap3_offset = 10.33,cap4_offset = 4.73;
@@ -23,9 +24,10 @@ float cap1_offset= 6.11,cap2_offset = 7.58,cap3_offset = 10.33,cap4_offset = 4.7
 FDC1004 FDC(FDC1004_400HZ);
 void setup()
 {
-  Wire2.begin();        //i2c begin
-//  calibrate();
+  Wire.begin();        //i2c begin
+  calibrate();
   Serial.begin(115200); // serial baud rate
+  timer = millis();
 //  print_offset();
 }
 //2.04  4 -0.79 0.10
@@ -35,13 +37,13 @@ void loop()
   static float h;
   
     //--- Read Capacitance Values ---//
-    cap1 = read_cap(0,capdac1,value1) - cap1_offset;
+//    cap1 = read_cap(0,capdac1,value1) - cap1_offset;
 //    cap2 = read_cap(1,capdac2,value2) - cap2_offset;
-    cap3 = read_cap(2,capdac3,value3) - cap3_offset;
+//    cap3 = read_cap(2,capdac3,value3) - cap3_offset;
     cap4 = read_cap(3,capdac4,value4) - cap4_offset;
-     h = ((cap4)/(cap3-cap1));///0.97;
+    
 //    cap_print();
-    cap_plot();
+    if((millis()-timer)>5000) cap_plot();
 //    delay(0);
-    Serial.println(h);
+//    Serial.println();
 }

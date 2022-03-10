@@ -72,7 +72,7 @@ void slosh_xy(){
 //  Serial.print("\t");
 //  Serial.print(cap3);
 //  Serial.print("\t");
-  Serial.println(cap4);
+//  Serial.println(cap4);
 ////  Serial.println();
 //  Serial.print("\tflag auto = ");
 //  Serial.print(flag_auto);
