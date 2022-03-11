@@ -1,7 +1,9 @@
 //===============================================================
 
-/* code for tuning velocity control
-  added vel_feedback in vel ctrl*/
+/* Code for generating trapezoidal reference velocity 
+   Algo : inc speed with a const rate , when it reaches max then measure the distance traversed(d) after that 
+   move with max speed for total dist-2d and decelerate for d distance */
+   //To Do : Print dist2 
 // #it is not tuned (1st feb)
 //===============================================================
 #include <XBOXUSB.h>
@@ -32,6 +34,7 @@
 #define motor_back_left 29
 #define OUTPUT_READABLE_YAWPITCHROLL
 #define INTERRUPT_PIN 20  // use pin 3 on Arduino Uno & most boards for IMU
+#define sgn(x) (x>0)?1:0
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
@@ -43,9 +46,9 @@ Fuzzy vel;
 USB Usb;
 XBOXUSB Xbox(&Usb);
 int pwm_front_right, pwm_front_left;
-int pwm_back_right, pwm_back_left, k = 10;
+int pwm_back_right, pwm_back_left, k = 10,dir= -1;
 double base_pwm = 0;
-bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=1, incr = 0;
+bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=1, incr = 0, stepup = 1;
 double kp= 3,kd = 6;
 double kp_d= 3,kd_d = 0.1;
 double kp_v= 0.4,kd_v = 3, ki_v= 0;

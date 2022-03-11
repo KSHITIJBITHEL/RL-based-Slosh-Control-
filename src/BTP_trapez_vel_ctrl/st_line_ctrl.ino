@@ -1,32 +1,15 @@
 void move_straight(double target_angle){
-  static int dist_low = 600,dist_high=2000, noise = 10;
-  static double orientation_error, prev_error, d_orientation_error,control_output=0, dir= -1, prev_dir=1, fuzzy_op;
+  static int dist_low = 600,dist_high=1800, noise = 10, prev_dir=1;
+  static double orientation_error, prev_error, d_orientation_error,control_output=0, fuzzy_op;
   act_disty = dist2*cos(yaw_reading*PI/180);
   vel_calc();
-  
-  if(millis()-ramptime<=2000 && flag_stop == 0){
-    des_vel = (100*des_vel+2.5*dir)/100;
-  }
-  else if(millis()-ramptime>2000 && millis()-ramptime<=4000 && flag_stop == 0){
-//    des_vel = (100*des_vel-5*dir)/100;
-//  continue;
-  }
-  else if(millis()-ramptime>4000 && millis()-ramptime<=6000 && flag_stop == 0){
-    des_vel = (100*des_vel-2.5*dir)/100;
-  }
-  else if(flag_stop == 0){
-    flag_stop = 1;
-    stop_time = millis();
-    des_vel = 0;
-    dir = -1*dir;
-    ramptime = millis();
-  }
-
+  des_vel = cal_vel_trap(dist_low,dist_high);
   fuzzy_op = vel_fuzzy(des_vel);
 //  Serial.print(fuzzy_op);
 //  Serial.print("\t");
-  if(incr) base_pwm = base_pwm+ fuzzy_op;
-  else base_pwm = 0;
+  base_pwm = base_pwm+ fuzzy_op;
+//  if(incr) base_pwm = base_pwm+ fuzzy_op;
+//  else base_pwm = 0;
 //    Serial.print(base_pwm);
    
   orientation_error = target_angle - yaw_reading ;
