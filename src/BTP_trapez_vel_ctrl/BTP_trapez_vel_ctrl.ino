@@ -113,7 +113,7 @@ void setup() {
   Serial3.write((uint8_t)0x11);
   Serial3.write((uint8_t)0x6F);
 //  Serial.println("Measurement unit set to MM");
-  vel.get_membership(15.0 , 2 , 3, 0.0);//2.4 * 15, 2.3 * 5, 125.0, 0.0//(15.0 , 2 , 5.0, 0.0)//(15.0 , 2 , 1.8, 0.0)
+  vel.get_membership(15.0 , 1.8 , 3, 0.0);//2.4 * 15, 2.3 * 5, 125.0, 0.0//(15.0 , 2 , 5.0, 0.0)//(15.0 , 2 , 1.8, 0.0)
 //  #if !defined(__MIPSEL__)
 //    while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
 //  #endif

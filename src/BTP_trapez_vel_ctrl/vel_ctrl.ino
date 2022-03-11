@@ -23,7 +23,7 @@ void vel_calc(){
   if(temp<20) velocity = moving_avg_vel(temp);
 }
 double cal_vel_trap(int dist_low, int dist_high){
-  static double des_speed, maxvel = 4,total_d = dist_high-dist_low, accl_d = 0,rate=5,dist_stop= dist_high;
+  static double des_speed, maxvel = 4,total_d = dist_high-dist_low, accl_d = 0,rate=10,dist_stop= dist_high;
  if(des_speed<maxvel && flag_stop == 0 && stepup){
     des_speed = (100*des_speed+rate)/100;
     ramptime = millis();
@@ -99,5 +99,5 @@ double vel_fuzzy(double desired_vel){
 //  Serial.print(vel_ctrl);
 //  Serial.print("\t ");
   prev_vel_error = vel_error;
-  return vel_ctrl;
+  return (vel_error<1)? vel_ctrl: 1.5*vel_ctrl;
 }
