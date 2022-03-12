@@ -59,6 +59,8 @@ double cal_vel_trap(int dist_low, int dist_high){
           flag_stop = 1;
           des_speed = 0;
           dir = -1*dir;
+          tripcount++;
+          Serial.println(tripcount);
           stepup = 1;
           dist_stop = act_disty;
           stop_time = millis();

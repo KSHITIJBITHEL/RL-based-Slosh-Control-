@@ -8,7 +8,8 @@ void dist_ctrl(double target_dist){
 //  }
   act_distx = dist1*cos(yaw_reading*PI/180);
 //  Serial.print("  ");
-//  Serial.print(act_distx);
+  Serial.print(act_distx);
+  Serial.print(",");
   
   dist_error = target_dist - act_distx ;
   d_dist_error = dist_error - prev_dist_error ; 

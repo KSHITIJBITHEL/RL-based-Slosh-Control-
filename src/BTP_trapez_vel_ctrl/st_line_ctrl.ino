@@ -2,9 +2,13 @@ void move_straight(double target_angle){
   static int dist_low = 700,dist_high=1800, noise = 10, prev_dir=1;
   static double orientation_error, prev_error, d_orientation_error,control_output=0, fuzzy_op;
   act_disty = dist2*cos(yaw_reading*PI/180);
+  
   vel_calc();
   des_vel = cal_vel_trap(dist_low,dist_high);
   fuzzy_op = vel_fuzzy(des_vel);
+
+  Serial.print(act_disty);
+  Serial.print(",");
 //  Serial.print(fuzzy_op);
 //  Serial.print("\t");
   base_pwm = base_pwm+ fuzzy_op;

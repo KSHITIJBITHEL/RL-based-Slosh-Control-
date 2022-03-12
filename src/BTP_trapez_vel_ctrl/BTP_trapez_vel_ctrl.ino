@@ -46,7 +46,7 @@ Fuzzy vel;
 USB Usb;
 XBOXUSB Xbox(&Usb);
 int pwm_front_right, pwm_front_left;
-int pwm_back_right, pwm_back_left, k = 10,dir= -1;
+int pwm_back_right, pwm_back_left, k = 10,dir= -1, tripcount = 0;
 double base_pwm = 0;
 bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=1, incr = 0, stepup = 1;
 double kp= 3,kd = 6;
@@ -291,7 +291,7 @@ void loop() {
   if(flag_print){
 //  Serial.print('\t');
   Serial.print(velocity);
-  Serial.print("\t");
+  Serial.print(",");
   Serial.println(des_vel);
   }
   delay(12);
