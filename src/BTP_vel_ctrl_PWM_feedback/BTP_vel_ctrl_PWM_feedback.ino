@@ -47,14 +47,14 @@ int pwm_back_right, pwm_back_left, k = 10, tripcount = 0;
 double base_pwm = 0;
 bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=0, incr = 0, printed = 0;
 double kp= 3,kd = 6;
-double kp_d= 3,kd_d = 0.1;
+double kp_d= 3,kd_d = 0.1,ki_d = 0.01;
 double kp_v= 0.4,kd_v = 3, ki_v= 0;
 long int t = millis(),stop_time=0, timer;
 // ================================================================
 // ===               Variables for Tf mini Lidar                ===
 // ================================================================
 double dist1,dist2, velocity, prev_ac_distx, prev_ac_disty, prev_distx, act_disty, act_distx; //actual distance measurements of LiDAR 
-double vel_error, prev_vel_error, d_vel_error, i_vel_error, vel_ctrl, base_vel = 6, des_vel;
+double vel_error, prev_vel_error, d_vel_error, i_vel_error, vel_ctrl, base_vel = 3,dir = -1, des_vel;
 int strength1,strength2; //signal strength of LiDAR
 float temprature1,temprature2;
 RunningMedian filterVel = RunningMedian(15);
@@ -272,10 +272,10 @@ void loop() {
   move_straight(0);
   dist_ctrl(100);
   if(flag_stop &&((millis()-stop_time)<2000)){
-      pwm_front_right = 127;
-      pwm_front_left = 127;
-      pwm_back_right = 127;
-      pwm_back_left = 127;
+//      pwm_front_right = 127;
+//      pwm_front_left = 127;
+//      pwm_back_right = 127;
+//      pwm_back_left = 127;
       i_vel_error = 0;
       incr = 0;
     }
