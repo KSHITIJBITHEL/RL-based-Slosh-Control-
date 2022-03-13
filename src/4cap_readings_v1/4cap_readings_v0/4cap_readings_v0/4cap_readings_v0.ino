@@ -25,8 +25,8 @@ FDC1004 FDC(FDC1004_400HZ);
 void setup()
 {
   Wire.begin();        //i2c begin
-  calibrate();
   Serial.begin(115200); // serial baud rate
+  calibrate();
   timer = millis();
 //  print_offset();
 }
@@ -41,9 +41,9 @@ void loop()
 //    cap2 = read_cap(1,capdac2,value2) - cap2_offset;
 //    cap3 = read_cap(2,capdac3,value3) - cap3_offset;
     cap4 = read_cap(3,capdac4,value4) - cap4_offset;
-    
+    cap4 = moving_average(cap4);
 //    cap_print();
-    if((millis()-timer)>5000) cap_plot();
+    cap_plot();
 //    delay(0);
 //    Serial.println();
 }
