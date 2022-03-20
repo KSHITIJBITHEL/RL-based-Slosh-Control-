@@ -1,9 +1,6 @@
 //===============================================================
 
-/* Code for moving on 2d trajectory  
-   Algo : combine x and y drift correction and move the holonomic drive in desired direction */
-   //To Do : Print dist2 
-// #it is not tuned (1st feb)
+/* code for estimating parameters for super twisting control */
 //===============================================================
 #include <XBOXUSB.h>
 #include <Fuzzy_lib_v7.h>
@@ -33,7 +30,6 @@
 #define motor_back_left 29
 #define OUTPUT_READABLE_YAWPITCHROLL
 #define INTERRUPT_PIN 20  // use pin 3 on Arduino Uno & most boards for IMU
-#define sgn(x) (x>0)?1:0
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
@@ -45,18 +41,18 @@ Fuzzy vel;
 USB Usb;
 XBOXUSB Xbox(&Usb);
 int pwm_front_right, pwm_front_left;
-int pwm_back_right, pwm_back_left, k = 10,dir= -1;
+int pwm_back_right, pwm_back_left, k = 10, tripcount = 0;
 double base_pwm = 0;
-bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=1, incr = 0, stepup = 1;
+bool flag_auto = 0,flag_print = 1, flag_slosh = 0,flag_stop=0, incr = 0, printed = 0;
 double kp= 3,kd = 6;
-double kp_d= 3,kd_d = 0.1, ki_d = 0.01;
+double kp_d= 3,kd_d = 0.1,ki_d = 0.01;
 double kp_v= 0.4,kd_v = 3, ki_v= 0;
-long int t = millis(),stop_time=0, timer, ramptime = 0;
+long int t = millis(),stop_time=0, timer;
 // ================================================================
 // ===               Variables for Tf mini Lidar                ===
 // ================================================================
 double dist1,dist2, velocity, prev_ac_distx, prev_ac_disty, prev_distx, act_disty, act_distx; //actual distance measurements of LiDAR 
-double vel_error, prev_vel_error, d_vel_error, i_vel_error, vel_ctrl, base_vel = 3, des_vel;
+double vel_error, prev_vel_error, d_vel_error, i_vel_error, vel_ctrl, base_vel = 3,dir = -1, des_vel;
 int strength1,strength2; //signal strength of LiDAR
 float temprature1,temprature2;
 RunningMedian filterVel = RunningMedian(15);
@@ -112,7 +108,7 @@ void setup() {
   Serial3.write((uint8_t)0x11);
   Serial3.write((uint8_t)0x6F);
 //  Serial.println("Measurement unit set to MM");
-  vel.get_membership(15.0 , 1.8 , 3, 0.0);//2.4 * 15, 2.3 * 5, 125.0, 0.0//(15.0 , 2 , 5.0, 0.0)//(15.0 , 2 , 1.8, 0.0)
+  vel.get_membership(15.0 , 2 , 1.8, 0.0);//2.4 * 15, 2.3 * 5, 125.0, 0.0//(15.0 , 2 , 5.0, 0.0)//(15.0 , 2 , 2.0, 0.0)
 //  #if !defined(__MIPSEL__)
 //    while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
 //  #endif
@@ -131,7 +127,7 @@ void setup() {
   #endif
 
    Wire2.begin();        //i2c begin
-//   calibrate_slosh();
+   calibrate_slosh();
 
   mpu.initialize();
   // load and configure the DMP
@@ -182,8 +178,6 @@ void setup() {
   send_motor_pwm();
   delay(30);
   mpu.resetFIFO();
-  ramptime = millis();
-  stop_time = millis();
 }
 
 // ================================================================
@@ -199,8 +193,8 @@ void loop() {
 //  prog_time = millis();
 //==================================================================
 //==================================================================
-// to tune angular pid
-/*  if (!dmpReady) return;
+/*// to tune angular pid
+  if (!dmpReady) return;
   got_intr();
 //  Serial.print(yaw_reading);
 //  Serial.print("\t");
@@ -211,7 +205,7 @@ void loop() {
   pwm_back_left = 127;
   move_straight(0);
 //  print_pwm();
-//  send_motor_pwm();
+  send_motor_pwm();
 //  delay(5);
 */
 //==================================================================
@@ -229,7 +223,7 @@ void loop() {
   pwm_back_left = 127;
   move_straight(0);
   dist_ctrl(110);
-//  send_motor_pwm();
+  send_motor_pwm();
 //  print_lidar();
   delay(10);
   */
@@ -261,10 +255,40 @@ void loop() {
   delay(25);*/
 //==================================================================
 //==================================================================
-// to tune vel ctrl
+/*// to tune vel ctrl
   if (!dmpReady) return;
   got_intr();
 //  mpu.resetFIFO();
+  read_lidar1();
+  read_lidar2();
+  yaw_reading = (ypr[0] - yaw_offset) * 180 / M_PI;
+//  vel_calc();
+  pwm_front_right = 127;
+  pwm_front_left = 127;
+  pwm_back_right = 127;
+  pwm_back_left = 127;
+  move_straight(0);
+  dist_ctrl(100);
+  if(flag_stop &&((millis()-stop_time)<2000)){
+//      pwm_front_right = 127;
+//      pwm_front_left = 127;
+//      pwm_back_right = 127;
+//      pwm_back_left = 127;
+      i_vel_error = 0;
+      incr = 0;
+    }
+   else {incr = 1; base_vel = 6;}
+//  print_pwm();
+//  print_gyro();
+  send_motor_pwm();
+  
+  delay(12);
+  */
+//==================================================================
+//==================================================================
+// to estimate parameters
+  if (!dmpReady) return;
+  got_intr();
   read_lidar1();
   read_lidar2();
   yaw_reading = (ypr[0] - yaw_offset) * 180 / M_PI;
@@ -274,26 +298,25 @@ void loop() {
   pwm_back_left = 127;
   move_straight(0);
   dist_ctrl(100);
-  if(flag_stop &&((millis()-stop_time)<2000)){
+  if(flag_stop &&((millis()-stop_time)<8000)){
       pwm_front_right = 127;
       pwm_front_left = 127;
       pwm_back_right = 127;
       pwm_back_left = 127;
       i_vel_error = 0;
       incr = 0;
-      ramptime = millis();
+      cap_plot();
     }
-   else {incr = 1; flag_stop = 0;}
+   else {incr = 1;}
+  cap1 = read_cap(3,capdac1,value1) - cap1_offset;
+  cap4 = read_cap(0,capdac4,value4) - cap4_offset;
+  
 //  print_pwm();
 //  print_gyro();
   send_motor_pwm();
-  if(flag_print){
-//  Serial.print('\t');
-//  Serial.print(velocity);
-//  Serial.print("\t");
-//  Serial.println(des_vel);
-  }
-  delay(12);
+  
+//  delay(12);
+  
 //==================================================================
 /*
   // if programming failed, don't try to do anything

@@ -1,5 +1,5 @@
 void move_straight(double target_angle){
-  static int dist_low = 300,dist_high=2000, noise = 10;
+  static int dist_low = 800,dist_high=1800, noise = 10;
   static double orientation_error, prev_error, d_orientation_error,control_output=0, prev_dir=-1, fuzzy_op;
   act_disty = dist2*cos(yaw_reading*PI/180);
 //  Serial.print(act_disty);
@@ -19,9 +19,10 @@ void move_straight(double target_angle){
   if(act_disty>dist_high && flag_stop) dir= -1;
 //  if(flag_auto)Serial.print(act_disty);
 //  des_vel = dir*base_vel_ctrl(act_disty,dist_low,dist_high);
-  des_vel = dir*base_vel;
+  des_vel = dir*base_vel_ctrl_stc(act_disty,dist_low,dist_high);
+//  des_vel = dir*base_vel;
   fuzzy_op = vel_fuzzy(des_vel);
-  if(incr){ base_pwm = dir*20;//base_pwm+ fuzzy_op;
+  if(incr){ base_pwm = base_pwm+ fuzzy_op;
 //    Serial.print(base_pwm);
     }
   else base_pwm = 0;
