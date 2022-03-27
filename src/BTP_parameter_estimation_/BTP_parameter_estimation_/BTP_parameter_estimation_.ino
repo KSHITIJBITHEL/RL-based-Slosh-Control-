@@ -112,10 +112,10 @@ void setup() {
 //  #if !defined(__MIPSEL__)
 //    while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
 //  #endif
-  if (Usb.Init() == -1) {
-      Serial.print(F("\r\nOSC did not start"));
-      while (1); //halt
-  }
+//  if (Usb.Init() == -1) {
+//      Serial.print(F("\r\nOSC did not start"));
+//      while (1); //halt
+//  }
   // join I2C bus (I2Cdev library doesn't do this automatically)
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     Wire.begin();
@@ -127,7 +127,7 @@ void setup() {
   #endif
 
    Wire2.begin();        //i2c begin
-   calibrate_slosh();
+
 
   mpu.initialize();
   // load and configure the DMP
@@ -162,6 +162,7 @@ void setup() {
   }
   calibrate();
 //  Serial.println("Calibrated");
+   calibrate_slosh();
   pinMode(INTERRUPT_PIN, INPUT);
   pinMode(motor_front_right, OUTPUT);
   pinMode(motor_front_left, OUTPUT);
@@ -298,7 +299,7 @@ void loop() {
   pwm_back_left = 127;
   move_straight(0);
   dist_ctrl(100);
-  if(flag_stop &&((millis()-stop_time)<8000)){
+  if(flag_stop &&((millis()-stop_time)<12000)){
       pwm_front_right = 127;
       pwm_front_left = 127;
       pwm_back_right = 127;
@@ -308,8 +309,8 @@ void loop() {
       cap_plot();
     }
    else {incr = 1;}
-  cap1 = read_cap(3,capdac1,value1) - cap1_offset;
-  cap4 = read_cap(0,capdac4,value4) - cap4_offset;
+  cap2 = read_cap(1,capdac1,value1) - cap2_offset;
+  cap3 = read_cap(2,capdac4,value4) - cap3_offset;
   
 //  print_pwm();
 //  print_gyro();

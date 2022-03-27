@@ -33,11 +33,11 @@ void cap_plot(){
 //  Serial.println(x);
 //  Serial.print(cap1);
 //  Serial.print(" ");
-//  Serial.print(cap2);
+  Serial.print(cap2);
+  Serial.print(",");
+  Serial.println(cap3);
 //  Serial.print(" ");
-//  Serial.print(cap3);
-//  Serial.print(" ");
-  Serial.println((cap4-cap1));
+//  Serial.println((cap4-cap1));
 }
 
 //---returns Capacitance values in pf---//

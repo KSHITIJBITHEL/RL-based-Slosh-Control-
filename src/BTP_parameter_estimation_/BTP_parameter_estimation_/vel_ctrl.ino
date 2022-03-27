@@ -8,11 +8,14 @@
 }
  double base_vel_ctrl_stc(double dist,double dist_low,double dist_high){
   static double vel, temp, vel_high = 8,vel_low = 1.5;
-  if(dir==1)
-  vel = double(map(dist,dist_low,dist_high,100*vel_low,100*vel_high));
-  else
-  vel = double(map(dist,dist_low,dist_high,100*vel_high,100*vel_low));
+  if(dir==1){
+  vel = double(map(dist,dist_low,(dist_high-400),100*vel_low,100*vel_high));
+  }
+  else{
+  vel = double(map(dist,(dist_low+400),dist_high,100*vel_high,100*vel_low));
+  }
   vel = vel/100;
+  vel = constrain(vel,vel_low,vel_high);
   return vel;
 }
 
