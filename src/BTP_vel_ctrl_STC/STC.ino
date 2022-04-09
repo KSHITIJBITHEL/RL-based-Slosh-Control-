@@ -1,16 +1,40 @@
-double STC (double x,double xd, double v,double h1,double h2){
-  static double zeta1,zeta2,zeta3,vl,wl,sigma,b1,c1=1,dia= ,M = , ms= ,des_v;
+double STC (double x,double xd, double v,double capa,double capb){
+  static double zeta1,zeta2,zeta3,vl,wl,sigma,b1,c1=1,dia= 11.8,M = 2.7, ms=0.375 ,des_v=0,h1,h2;
   static double c2 = 2.6441,k1 = 1.114,k2 = 0.1001,force,vel_integral =0;
+  h1 = (capa+0.388)/0.5011;
+  h2 = (capb+0.3505)/0.4743;
   zeta1 = x-xd;
-  zeta2 = vel;
-  zeta3 = atan((h2-h2)/dia);
+  zeta2 = v;
+  zeta3 = atan((h2-h1)/dia);
   b1 = 1/(M-ms*cos(zeta3)*cos(zeta3));
   sigma = c1*zeta2+c2*zeta1;
   wl = (sigma-c2*zeta1)*c2/c1;
-  vl_integral += k2*signum(sigma);
-  vl = -k1*signum(sigma)*sqrt(abs(sigma))- vl_integral;
+//  if(!incr) vel_integral = 0;
+  vel_integral += k2*signum(sigma);
+  vl = -(k1*signum(sigma)*sqrt(abs(sigma)))- vel_integral;
   force = (vl-wl)/(c1*b1);
-  des_v = des_v+ force*(t_stc-millis())/(1000*M);
+//  if(!incr) des_v = 0;
+   des_v = des_v+ (force*(millis()-t_stc))/(1000*M);
+//  Serial.print(millis()-t_stc);
+//  Serial.print('\t');
   t_stc = millis();
-  return des_v;
+  Serial.print(M);
+  Serial.print('\t');
+  Serial.print(cos(zeta3)*cos(zeta3));
+  Serial.print('\t');
+  Serial.print(zeta3);
+  Serial.print('\t');
+  Serial.print(b1);
+  Serial.print('\t');
+  Serial.print(sigma);
+  Serial.print('\t');
+  Serial.print(h1);
+  Serial.print('\t');
+  Serial.print(h2);
+  Serial.print('\t');
+  Serial.print(force);
+  Serial.print('\t');
+  Serial.println(des_v/100);
+  
+  return des_v/100;
 }

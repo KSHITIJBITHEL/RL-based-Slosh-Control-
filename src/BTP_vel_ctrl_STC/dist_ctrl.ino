@@ -7,16 +7,16 @@ void dist_ctrl(double target_dist){
 //    prev_distx = dist1;
 //  }
   act_distx = dist1*cos(yaw_reading*PI/180);
-  target_dist = base - h*sin(2*PI*(act_disty- phi )/lambda); 
-  Serial.print(act_distx);
-  Serial.print(",");
-  Serial.println(target_dist);
+//  target_dist = base - h*sin(2*PI*(act_disty- phi )/lambda); 
+//  Serial.print(act_distx);
+//  Serial.print(",");
+//  Serial.println(target_dist);
 //  Serial.print(",");
 //  Serial.print(velocity);
 //  Serial.print(",");
 //  Serial.println(des_vel);
   if(flag_stop && !printed) {
-    Serial.println(tripcount);
+//    Serial.println(tripcount);
     printed = 1;
   }
   

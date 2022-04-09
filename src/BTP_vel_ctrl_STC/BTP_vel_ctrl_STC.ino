@@ -32,7 +32,7 @@
 #define motor_back_left 29
 #define OUTPUT_READABLE_YAWPITCHROLL
 #define INTERRUPT_PIN 20  // use pin 3 on Arduino Uno & most boards for IMU
-
+#define signum(x) (x==0)?0:((x>0)?1:-1)
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
 // AD0 low = 0x68 (default for SparkFun breakout and InvenSense evaluation board)
@@ -92,7 +92,7 @@ float ypr[3];           // yaw pitch roll readings
 float yaw_offset, pitch_offset, roll_offset;
 float yaw_reading, pitch_reading, roll_reading;
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
-long int t_stc;
+long long int t_stc;
 // ================================================================
 // ===                      INITIAL SETUP                       ===
 // ================================================================
@@ -129,7 +129,7 @@ void setup() {
   #endif
 
    Wire2.begin();        //i2c begin
-//   calibrate_slosh();
+
 
   mpu.initialize();
   // load and configure the DMP
@@ -162,7 +162,8 @@ void setup() {
     Serial.print(devStatus);
     Serial.println(F(")"));
   }
-  calibrate();
+//  calibrate();
+  calibrate_slosh();
 //  Serial.println("Calibrated");
   pinMode(INTERRUPT_PIN, INPUT);
   pinMode(motor_front_right, OUTPUT);
@@ -270,6 +271,8 @@ void loop() {
   pwm_front_left = 127;
   pwm_back_right = 127;
   pwm_back_left = 127;
+  cap2 = read_cap(2,capdac2,value2) - cap2_offset;
+  cap3 = read_cap(1,capdac3,value3) - cap3_offset;
   move_straight(0);
   dist_ctrl(100);
   if(flag_stop &&((millis()-stop_time)<2000)){
@@ -284,8 +287,7 @@ void loop() {
 //  print_pwm();
 //  print_gyro();
   send_motor_pwm();
-  
-  delay(12);
+//  delay(12);
 //==================================================================
 /*
   // if programming failed, don't try to do anything
