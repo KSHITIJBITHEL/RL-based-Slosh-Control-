@@ -1,10 +1,10 @@
 void calibrate_slosh (){
     static float sum1 = 0,sum2 = 0,sum3 = 0,sum4 = 0;
     for (int i = 0; i<100;i++){
-    cap1 = read_cap(3,capdac1,value1);
-    cap2 = read_cap(2,capdac2,value2);
-    cap3 = read_cap(1,capdac3,value3);
-    cap4 = read_cap(0,capdac4,value4); 
+    cap1 = read_cap(0,capdac1,value1);
+    cap2 = read_cap(1,capdac2,value2);
+    cap3 = read_cap(2,capdac3,value3);
+    cap4 = read_cap(3,capdac4,value4); 
     sum1 += cap1;
     sum2 += cap2;
     sum3 += cap3;
@@ -17,16 +17,16 @@ void calibrate_slosh (){
 }
 
 //--- Prints Capacitance Values ---//
-//void cap_print(){
-//  Serial.print(" C1 : ");
-//  Serial.print(cap1);
-//  Serial.print(" C2 : ");
-//  Serial.print(cap2);
-//  Serial.print(" C3 : ");
-//  Serial.print(cap3);
-//  Serial.print(" C4 : ");
-//  Serial.print(cap4);
-//}
+void cap_offset_print(){
+  Serial.print(" C1 : ");
+  Serial.print(cap1_offset);
+  Serial.print(" C2 : ");
+  Serial.print(cap2_offset);
+  Serial.print(" C3 : ");
+  Serial.print(cap3_offset);
+  Serial.print(" C4 : ");
+  Serial.print(cap4_offset);
+}
 
 //--- Plots Capacitance Values ---//
 void cap_plot(){
