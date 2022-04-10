@@ -39,15 +39,7 @@ void loop()
     //--- Read Capacitance Values ---//
 //    cap1 = read_cap(0,capdac1,value1) - cap1_offset;
     cap2 = read_cap(1,capdac2,value2) - cap2_offset;
-<<<<<<< HEAD
-<<<<<<< HEAD
     cap3 = read_cap(2,capdac3,value3) - cap3_offset;
-=======
-//    cap3 = read_cap(2,capdac3,value3) - cap3_offset;
->>>>>>> 5a135e4e679808e55565937780f5c9e456c50d55
-=======
-    cap3 = read_cap(2,capdac3,value3) - cap3_offset;
->>>>>>> 177c78a5deece39474b22868a2898bc01be28cd0
 //    cap4 = read_cap(3,capdac4,value4) - cap4_offset;
 //    cap2 = moving_average(cap2);
 //    cap_print();
