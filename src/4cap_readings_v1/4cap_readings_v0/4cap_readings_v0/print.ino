@@ -16,24 +16,10 @@ void cap_plot(){
 //  Serial.println(x);
 //  Serial.print(cap1);
 //  Serial.print('\t');
-<<<<<<< HEAD
-<<<<<<< HEAD
   Serial.print(cap2);
   Serial.print("\t");
   Serial.println(cap3);
 //  Serial.print(",");
-=======
-  Serial.println(cap2);
-//  Serial.print("\t");
-//  Serial.println(cap3);
-=======
-  Serial.print(cap2);
-  Serial.print("\t");
-  Serial.println(cap3);
->>>>>>> 177c78a5deece39474b22868a2898bc01be28cd0
-//  Serial.print("\t");
->>>>>>> 5a135e4e679808e55565937780f5c9e456c50d55
-//  Serial.println(cap4);
 //  Serial.print("\t");
 //  Serial.println(10*(cap4-cap1));
 }
