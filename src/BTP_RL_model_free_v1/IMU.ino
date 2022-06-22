@@ -3,6 +3,7 @@
 // ================================================================
 void dmpDataReady() {
   mpuInterrupt = true;
+//  Serial.println("a");
 //  got_intr();
 }
 // ================================================================
@@ -17,8 +18,9 @@ void calibrate (){
     for (int i =0; i<=1000; i++){
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) ;
-    got_intr();
 //    Serial.println(i);
+    got_intr();
+    
     }
 //    Serial.println(" Starting Calibration ");
     for (int i =0; i<20; i++){
@@ -38,6 +40,9 @@ void calibrate (){
 // ===       Function To execute after getting interrupt        ===
 // ================================================================
 void got_intr(){
+
+    static float sum_yaw, sum_pitch, sum_roll;
+    sum_yaw = 0; sum_pitch = 0; sum_roll = 0;
     // reset interrupt flag and get INT_STATUS byte
     mpuInterrupt = false;
     mpuIntStatus = mpu.getIntStatus();
@@ -70,5 +75,32 @@ void got_intr(){
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
         #endif
 
+//        if(counter<800){
+//          counter++;
+////          Serial.println(counter);
+//        }
+//        else if(counter>=800 && counter <=810){
+//          sum_yaw = sum_yaw + ypr[0]; 
+//          sum_pitch = sum_pitch + ypr[1]; 
+//          sum_roll = sum_roll + ypr[2]; 
+//          counter++;
+////          Serial.println(counter);
+//        }
+//        else if(!calib){
+//          yaw_offset = sum_yaw/10.0;
+//          pitch_offset = sum_pitch/10.0;
+//          roll_offset = sum_roll/10.0;
+//          calib = 1;
+////          Serial.println("calib 1");
+//        }
+//
+//        else{
+//          Serial.println("yaw calc");
+        yaw_reading = (ypr[0] - yaw_offset) * 180 / M_PI;
+//        pitch_reading = (ypr[1] - pitch_offset) * 180 / M_PI;
+//        roll_reading = (ypr[2] - roll_offset) * 180 / M_PI;
+        //    print_ypr();
+//        print_gyro();
+//        }
     }
 }

@@ -1,5 +1,5 @@
 void move_straight(double target_angle){
-  static int dist_low = 300,dist_high=2000, noise = 10;
+  static int dist_low = 600,dist_high=1400, noise = 10;
   static double orientation_error, prev_error, d_orientation_error,control_output=0, prev_dir=-1, fuzzy_op;
   act_disty = dist2*cos(yaw_reading*PI/180);
 //  Serial.print(act_disty);

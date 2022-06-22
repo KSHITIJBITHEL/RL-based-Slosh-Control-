@@ -54,6 +54,8 @@ uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
 float f_mag[3];         // magnetometer data after conversion according to datasheet
 float d_mag[4];
+int counter = 0;
+bool calib = 0;
 
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
@@ -72,6 +74,7 @@ float yaw_reading, pitch_reading, roll_reading;
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
   mpuInterrupt = true;
+  got_intr();
 }
 
 
@@ -152,7 +155,12 @@ void setup() {
 
   // configure LED for output
   pinMode(LED_PIN, OUTPUT);
+  Serial.println("calibration started");
+//  while(!calib){
+//    
+//  }
   calibrate();
+  Serial.println("calibrated");
 }
 
 
@@ -165,24 +173,20 @@ void loop() {
   // if programming failed, don't try to do anything
   if (!dmpReady) return;
   // wait for MPU interrupt or extra packet(s) available
-  while (!mpuInterrupt && fifoCount < packetSize) {
-    // other program behavior stuff here
-    // .
-    // .
-    // .
-    // if you are really paranoid you can frequently test in between other
-    // stuff to see if mpuInterrupt is true, and if so, "break;" from the
-    // while() loop to immediately process the MPU data
-    // .
-    // .
-    // .
-  }
-  got_intr();
-  yaw_reading = (ypr[0] - yaw_offset) * 180 / M_PI;
-  pitch_reading = (ypr[1] - pitch_offset) * 180 / M_PI;
-  roll_reading = (ypr[2] - roll_offset) * 180 / M_PI;
-  //    print_ypr();
-  print_reading();
+//  while (!mpuInterrupt && fifoCount < packetSize) {
+//    // other program behavior stuff here
+//    // .
+//    // .
+//    // .
+//    // if you are really paranoid you can frequently test in between other
+//    // stuff to see if mpuInterrupt is true, and if so, "break;" from the
+//    // while() loop to immediately process the MPU data
+//    // .
+//    // .
+//    // .
+//  }
+
+
   //    Serial.println();
   delay(20);
 }

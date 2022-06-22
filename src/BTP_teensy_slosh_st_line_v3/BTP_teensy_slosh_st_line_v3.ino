@@ -128,7 +128,7 @@ void setup() {
   #endif
 
    Wire2.begin();        //i2c begin
-   calibrate_slosh();
+//   calibrate_slosh();/
     
   mpu.initialize();
   // load and configure the DMP
@@ -161,7 +161,7 @@ void setup() {
     Serial.print(devStatus);
     Serial.println(F(")"));
   }
-  calibrate();
+//  calibrate();
   Serial.println("Calibrated");
   pinMode(INTERRUPT_PIN, INPUT);
   pinMode(motor_front_right, OUTPUT);
@@ -202,8 +202,9 @@ void loop() {
     read_lidar1();
     read_lidar2();
 //    slosh_xy();
-    if(!(flag_stop &&((millis()-stop_time)<8000)))
+    if(!(flag_stop &&((millis()-stop_time)<8000))){
       xbox_control();
+    }
     else if(flag_stop &&((millis()-stop_time)<8000)){
       pwm_front_right = 127;
       pwm_front_left = 127;
@@ -219,12 +220,21 @@ void loop() {
   delay(1);
 //  Serial.println("bahar aya");
   got_intr();
-  yaw_reading = (ypr[0] - yaw_offset) * 180 / M_PI;
+  yaw_reading = 0;//(ypr[0] - yaw_offset) * 180 / M_PI;
 //  yaw_reading = 0;
   pitch_reading = (ypr[1] - pitch_offset) * 180 / M_PI;
   roll_reading = (ypr[2] - roll_offset) * 180 / M_PI;
   print_gyro();
 //  Serial.print(yaw_reading);
+Serial.print(pwm_front_right);
+  Serial.print(" ");
+  Serial.print(pwm_front_left);
+  Serial.print(" ");
+  Serial.print(pwm_back_right);
+  Serial.print(" ");
+  Serial.print(pwm_back_left);
+  Serial.print(" ");
+  Serial.println();
 }
 
 void send_motor_pwm(){

@@ -170,7 +170,10 @@ void setup() {
     Serial.print(devStatus);
     Serial.println(F(")"));
   }
-  calibrate();
+  Serial.println("calibration started");
+  while(!calib){
+    
+  }
   Serial.println("calibrated");
   calibrate_slosh();
 //  cap_offset_print();
@@ -350,23 +353,19 @@ while(Serial.available()){
      else {incr = 1; base_vel = 6;}
   //  print_pwm();
   //  print_gyro();
-    reward += -(0.02*abs(act_disty-target)+0.3*abs(phi)+0.3*abs(phi_dot));
+    reward += -(0.004*abs(act_disty-target)+0.3*abs(phi)+0.3*abs(phi_dot));
     send_motor_pwm();
     delay(5);
 }
-  Serial.println(String(act_disty/1000)+','+String(velocity)+','+String(phi)+','+String(phi_dot)+','+String(reward));
-  Serial.println("25");
+//  Serial.println(String(act_disty/1000)+','+String(velocity)+','+String(phi)+','+String(phi_dot)+','+String(reward));
+//  Serial.println("25");
   pwm_front_right = 127;
   pwm_front_left = 127;
   pwm_back_right = 127;
   pwm_back_left = 127;
   send_motor_pwm();
   flag_go_back = 1;
-  t_one_run = millis();
-  while(millis()-t_one_run<2000){
-  got_intr();
-  delay(5);
-  }
+  delay(2000);
 
   incr=1;
   flag_stop = 0;
@@ -408,14 +407,12 @@ while(Serial.available()){
   s = "";
   incr = 1;
   flag_stop = 0;
-//  Serial.println("aaya");
-//  Serial.println(vel_integral);
-//  Serial.println(String(act_disty)+','+String(velocity)+','+String(phi)+','+String(phi_dot)+','+String(reward));
-//  Serial.println("25");
+  Serial.println("aaya");
+  Serial.println(vel_integral);
+  Serial.println(String(act_disty)+','+String(velocity)+','+String(phi)+','+String(phi_dot)+','+String(reward));
+  Serial.println("25");
   reward =0;
-  
 }
-got_intr();
 
 //==================================================================
 /*

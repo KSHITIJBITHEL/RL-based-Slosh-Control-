@@ -1,8 +1,8 @@
 double STC (double x,double xd, double v,double capa,double capb){
   static double zeta1,zeta2,zeta3,vl,wl,sigma,b1,c1=1,dia= 11.8,M = 2.7, ms=0.375 ,h1,h2;
   static double force;
-  h1 = (capa+0.388)/0.5011;
-  h2 = (capb+0.3505)/0.4743;
+  h1 = 5;// (capa+0.388)/0.5011;
+  h2 = 5;//(capb+0.3505)/0.4743;
   zeta1 = x-xd;
   zeta2 = v;
   zeta3 = atan((h2-h1)/dia);

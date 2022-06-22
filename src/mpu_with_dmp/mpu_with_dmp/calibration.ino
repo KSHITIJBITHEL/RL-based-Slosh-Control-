@@ -5,7 +5,7 @@ void calibrate (){
     if (!dmpReady) return;
 
 //  Wait for the readings to saturate
-    for (int i =0; i<=800; i++){
+    for (int i =0; i<=80; i++){
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) ;
     got_intr();
