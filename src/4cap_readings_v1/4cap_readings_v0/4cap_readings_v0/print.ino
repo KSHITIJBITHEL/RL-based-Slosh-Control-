@@ -14,13 +14,14 @@
 void cap_plot(){
 
 //  Serial.println(x);
-//  Serial.print(cap1);
-//  Serial.print('\t');
+  Serial.print(cap1);
+  Serial.print('\t');
   Serial.print(cap2);
   Serial.print("\t");
-  Serial.println(cap3);
+  Serial.print(cap3);
 //  Serial.print(",");
-//  Serial.print("\t");
+  Serial.print("\t");
+  Serial.println(cap4);
 //  Serial.println(10*(cap4-cap1));
 }
 void print_offset(){
